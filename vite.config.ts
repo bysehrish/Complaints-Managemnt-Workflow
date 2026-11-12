@@ -1,12 +1,31 @@
-import tailwindcss from '@tailwindcss/vite';
-import react from '@vitejs/plugin-react';
+import fs from 'fs';
 import path from 'path';
 import {defineConfig} from 'vite';
+import tailwindcss from '@tailwindcss/vite';
+import react from '@vitejs/plugin-react';
 
 export default defineConfig(() => {
   return {
     base: './',
-    plugins: [react(), tailwindcss()],
+    plugins: [
+      react(),
+      tailwindcss(),
+      {
+        name: 'generate-404-fallback',
+        closeBundle() {
+          try {
+            const distDir = path.resolve(process.cwd(), 'dist');
+            const indexFile = path.join(distDir, 'index.html');
+            const fourOhFourFile = path.join(distDir, '404.html');
+            if (fs.existsSync(indexFile)) {
+              fs.copyFileSync(indexFile, fourOhFourFile);
+            }
+          } catch (e) {
+            // Non-critical fallback
+          }
+        },
+      },
+    ],
     resolve: {
       alias: {
         '@': path.resolve(process.cwd(), '.'),
