@@ -24,8 +24,10 @@ import {
   CheckCircle2,
   Clock,
   AlertTriangle,
-  Layers
+  Layers,
+  Printer
 } from 'lucide-react';
+import * as XLSX from 'xlsx';
 import { CRMComplaint } from '../types/crm';
 import { PortalPage } from '../types/portal';
 
@@ -217,8 +219,70 @@ export const ExecutiveDashboardPage: React.FC<ExecutiveDashboardPageProps> = ({
     return <span className="font-semibold text-emerald-600">Resolved</span>;
   };
 
+  const handleExportExcel = () => {
+    const workbook = XLSX.utils.book_new();
+
+    // 1. Executive Summary Sheet
+    const summaryData = [
+      ['SERVICE QUALITY GOVERNANCE - EXECUTIVE COMPLAINTS ANALYTICS'],
+      ['Report Generated:', new Date().toLocaleString()],
+      ['Reporting Filter:', selectedMonth === 'ALL' ? 'Full Year (All Months)' : `Month: ${selectedMonth}`],
+      [],
+      ['KPI Metric', 'Current Value', 'MoM Delta (Variance)'],
+      ['Total Complaints #', currentTotal, totalDelta],
+      ['WIP Complaints #', currentWip, wipDelta],
+      ['Resolved Complaints #', currentResolved, resolvedDelta],
+      ['Response Rate %', `${currentRate}%`, rateDelta],
+      [],
+      ['Status Breakdown', 'Count'],
+      ['In Progress', statusCounts['In Progress'] || 0],
+      ['Resolved', statusCounts['Resolved'] || 0],
+      ['Open', statusCounts['Open'] || 0],
+    ];
+    const summarySheet = XLSX.utils.aoa_to_sheet(summaryData);
+    XLSX.utils.book_append_sheet(workbook, summarySheet, 'Executive Summary');
+
+    // 2. Case Registry Sheet
+    const caseHeaders = [
+      'Case #',
+      'Logging Date',
+      'Closing Date',
+      'Aging',
+      'Priority',
+      'Product',
+      'Category',
+      'Description',
+      'Customer Name',
+      'Account Number',
+      'CMU Owner',
+      'Status',
+    ];
+    const caseRows = filteredData.map((c) => [
+      c['Complaint Number'],
+      c['Logging Date'],
+      c['Closing Date'] || '',
+      c['Aging'],
+      c['Priority'],
+      c['Product'],
+      c['ComplaintType'],
+      c['description_compaint'],
+      c['customer_name_c'],
+      c['customer_account_c'],
+      c['cmu_owner_c'],
+      c['Status'],
+    ]);
+    const registrySheet = XLSX.utils.aoa_to_sheet([caseHeaders, ...caseRows]);
+    XLSX.utils.book_append_sheet(workbook, registrySheet, 'Case Registry');
+
+    XLSX.writeFile(workbook, `Executive_Complaints_Analytics_${selectedMonth}_${new Date().toISOString().slice(0, 10)}.xlsx`);
+  };
+
+  const handlePrint = () => {
+    window.print();
+  };
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 print:p-0">
       {/* ========================================================= */}
       {/* 1. UPDATED MAIN GOVERNANCE BANNER WITH INTEGRATED CONTROLS */}
       {/* ========================================================= */}
@@ -269,10 +333,26 @@ export const ExecutiveDashboardPage: React.FC<ExecutiveDashboardPageProps> = ({
               </button>
 
               <button
-                onClick={onOpenUpload}
+                onClick={handleExportExcel}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-750 font-semibold text-xs transition-colors shadow-2xs"
               >
                 <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Export Excel</span>
+              </button>
+
+              <button
+                onClick={handlePrint}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-750 font-semibold text-xs transition-colors shadow-2xs print:hidden"
+              >
+                <Printer className="w-3.5 h-3.5 text-slate-500" />
+                <span>Print Report</span>
+              </button>
+
+              <button
+                onClick={onOpenUpload}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-750 font-semibold text-xs transition-colors shadow-2xs"
+              >
+                <FileSpreadsheet className="w-3.5 h-3.5 text-blue-600" />
                 <span>Import Raw CRM Excel</span>
               </button>
 
