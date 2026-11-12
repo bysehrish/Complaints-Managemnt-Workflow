@@ -13,8 +13,52 @@ import { PortalPage, NotificationAlert } from './types/portal';
 import { Complaint } from './types';
 
 export default function App() {
-  // Page Routing State (Default: 'dashboard')
-  const [currentPage, setCurrentPage] = useState<PortalPage>('dashboard');
+  // Helper to parse page from hash or search param (e.g. redirected by GitHub Pages 404.html)
+  const getInitialPage = (): PortalPage => {
+    if (typeof window === 'undefined') return 'dashboard';
+    const rawHash = window.location.hash.replace(/^#\/?/, '').trim().toLowerCase();
+    const validPages: PortalPage[] = ['dashboard', 'monthly_analysis', 'quarterly_metrics', 'sub_category_breakdown'];
+    if (validPages.includes(rawHash as PortalPage)) {
+      return rawHash as PortalPage;
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const p = params.get('p')?.replace(/^\//, '').trim().toLowerCase();
+    if (p && validPages.includes(p as PortalPage)) {
+      return p as PortalPage;
+    }
+
+    return 'dashboard';
+  };
+
+  // Page Routing State (Default: hash-aware or 'dashboard')
+  const [currentPage, setCurrentPage] = useState<PortalPage>(getInitialPage);
+
+  // Sync state to hash on navigate
+  const handleNavigate = (page: PortalPage) => {
+    setCurrentPage(page);
+    if (window.location.hash !== `#/${page}`) {
+      window.location.hash = `#/${page}`;
+    }
+  };
+
+  // Listen to browser Back/Forward and hash changes
+  useEffect(() => {
+    const onHashChange = () => {
+      const rawHash = window.location.hash.replace(/^#\/?/, '').trim().toLowerCase();
+      const validPages: PortalPage[] = ['dashboard', 'monthly_analysis', 'quarterly_metrics', 'sub_category_breakdown'];
+      if (validPages.includes(rawHash as PortalPage)) {
+        setCurrentPage(rawHash as PortalPage);
+      }
+    };
+
+    window.addEventListener('hashchange', onHashChange);
+    if (!window.location.hash) {
+      window.location.hash = `#/${currentPage}`;
+    }
+
+    return () => window.removeEventListener('hashchange', onHashChange);
+  }, []);
 
   // Master CRM Dataset shared globally across all 5 pages
   const [crmData, setCrmData] = useState<CRMComplaint[]>(INITIAL_CRM_DATA);
@@ -163,7 +207,7 @@ export default function App() {
     };
 
     setCrmData([newRecord, ...crmData]);
-    setCurrentPage('dashboard');
+    handleNavigate('dashboard');
   };
 
   return (
@@ -171,7 +215,7 @@ export default function App() {
       {/* 1. Collapsible Left Sidebar Navigation */}
       <Sidebar
         currentPage={currentPage}
-        onNavigate={setCurrentPage}
+        onNavigate={handleNavigate}
         isCollapsed={isSidebarCollapsed}
         onToggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
         isDarkMode={isDarkMode}
@@ -189,7 +233,7 @@ export default function App() {
               <ExecutiveDashboardPage
                 data={crmData}
                 onSelectComplaint={setSelectedCase}
-                onNavigate={setCurrentPage}
+                onNavigate={handleNavigate}
                 onOpenUpload={() => setIsUploadModalOpen(true)}
                 onOpenLogModal={() => setIsLogModalOpen(true)}
               />
@@ -199,21 +243,21 @@ export default function App() {
             {currentPage === 'monthly_analysis' && (
               <MonthlyComplaintsAnalysisPage
                 data={crmData}
-                onNavigate={setCurrentPage}
+                onNavigate={handleNavigate}
               />
             )}
 
             {/* Page 3: Product Quarterly Metrics (CDR Analysis) */}
             {currentPage === 'quarterly_metrics' && (
               <QuarterlyProductMetricsPage
-                onNavigate={setCurrentPage}
+                onNavigate={handleNavigate}
               />
             )}
 
             {/* Page 4: Top Product-Wise Complaints & Sub-Category Breakdown */}
             {currentPage === 'sub_category_breakdown' && (
               <SubCategoryBreakdownPage
-                onNavigate={setCurrentPage}
+                onNavigate={handleNavigate}
               />
             )}
           </div>
