@@ -286,17 +286,21 @@ export const ExecutiveDashboardPage: React.FC<ExecutiveDashboardPageProps> = ({
       {/* ========================================================= */}
       {/* 1. UPDATED MAIN GOVERNANCE BANNER WITH INTEGRATED CONTROLS */}
       {/* ========================================================= */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-2xs">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+      {/* ========================================================= */}
+      {/* 1. UPDATED MAIN GOVERNANCE BANNER WITH INTEGRATED CONTROLS */}
+      {/* ========================================================= */}
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 sm:p-6 shadow-2xs space-y-4">
+        {/* Tier 1: Main Title & Primary Operational Actions */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-3 border-b border-slate-100 dark:border-slate-800/80">
           {/* Left: Section Label, Main Title, Sub-header */}
-          <div className="space-y-1">
+          <div className="space-y-1 min-w-0">
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-blue-600" />
+              <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
               <span className="text-[11px] font-extrabold text-blue-700 dark:text-blue-400 uppercase tracking-widest">
                 SERVICE QUALITY GOVERNANCE
               </span>
             </div>
-            <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-2 mb-1">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-1 mb-1 truncate">
               Complaints Management Analytics
             </h1>
             <p className="text-xs text-slate-500 dark:text-slate-400 max-w-2xl leading-relaxed">
@@ -304,79 +308,68 @@ export const ExecutiveDashboardPage: React.FC<ExecutiveDashboardPageProps> = ({
             </p>
           </div>
 
-          {/* Right: Integrated Action Buttons & 2026 Controls */}
-          <div className="flex flex-col items-start lg:items-end gap-3 shrink-0">
-            {/* Action Buttons Row */}
-            <div className="flex items-center gap-2 flex-wrap">
-              <button
-                onClick={() => onNavigate('monthly_analysis')}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800/60 hover:bg-amber-100 dark:hover:bg-amber-900/40 font-semibold text-xs transition-colors shadow-2xs"
-              >
-                <Calendar className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
-                <span>Monthly Analysis 2026</span>
-              </button>
+          {/* Right: Primary Call-to-Actions (Guaranteed in frame) */}
+          <div className="flex items-center gap-2.5 flex-wrap shrink-0">
+            <button
+              onClick={onOpenUpload}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-750 font-semibold text-xs transition-colors shadow-2xs"
+            >
+              <FileSpreadsheet className="w-3.5 h-3.5 text-blue-600" />
+              <span>Import Raw CRM Excel</span>
+            </button>
 
-              <button
-                onClick={() => onNavigate('quarterly_metrics')}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 font-semibold text-xs transition-colors shadow-2xs"
-              >
-                <Activity className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
-                <span>Product Quarterly CDR</span>
-              </button>
+            <button
+              onClick={onOpenLogModal}
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-xs transition-colors shrink-0"
+            >
+              <Plus className="w-4 h-4" />
+              <span>+ Log Complaint</span>
+            </button>
+          </div>
+        </div>
 
-              <button
-                onClick={() => onNavigate('sub_category_breakdown')}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 font-semibold text-xs transition-colors shadow-2xs"
-              >
-                <Layers className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                <span>Sub-Category Breakdown</span>
-              </button>
+        {/* Tier 2: Governance Navigation Shortcuts & 2026 Reporting Filter Toolbar */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pt-1">
+          {/* Navigation Shortcuts */}
+          <div className="flex items-center gap-2 flex-wrap">
+            <button
+              onClick={() => onNavigate('monthly_analysis')}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800/60 hover:bg-amber-100 dark:hover:bg-amber-900/40 font-semibold text-xs transition-colors shadow-2xs"
+            >
+              <Calendar className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+              <span>Monthly Analysis 2026</span>
+            </button>
 
-              <button
-                onClick={handleExportExcel}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-750 font-semibold text-xs transition-colors shadow-2xs"
-              >
-                <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
-                <span>Export Excel</span>
-              </button>
+            <button
+              onClick={() => onNavigate('quarterly_metrics')}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 font-semibold text-xs transition-colors shadow-2xs"
+            >
+              <Activity className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+              <span>Product Quarterly CDR</span>
+            </button>
 
-              <button
-                onClick={handlePrint}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-750 font-semibold text-xs transition-colors shadow-2xs print:hidden"
-              >
-                <Printer className="w-3.5 h-3.5 text-slate-500" />
-                <span>Print Report</span>
-              </button>
+            <button
+              onClick={() => onNavigate('sub_category_breakdown')}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 font-semibold text-xs transition-colors shadow-2xs"
+            >
+              <Layers className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+              <span>Sub-Category Breakdown</span>
+            </button>
+          </div>
 
-              <button
-                onClick={onOpenUpload}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-750 font-semibold text-xs transition-colors shadow-2xs"
-              >
-                <FileSpreadsheet className="w-3.5 h-3.5 text-blue-600" />
-                <span>Import Raw CRM Excel</span>
-              </button>
-
-              <button
-                onClick={onOpenLogModal}
-                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-xs transition-colors"
-              >
-                <Plus className="w-4 h-4" />
-                <span>+ Log Complaint</span>
-              </button>
-            </div>
-
+          {/* Tools & 2026 Reporting Filters */}
+          <div className="flex items-center gap-2.5 flex-wrap">
             {/* 2026 Reporting Month Filter LOV & MoM Comparison Toggle */}
-            <div className="flex items-center gap-3 bg-slate-50 dark:bg-slate-800/80 p-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs flex-wrap">
-              {/* Dropdown LOV */}
+            <div className="flex items-center gap-3 bg-slate-50 dark:bg-slate-800/80 p-1.5 px-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs flex-wrap">
               <div className="flex items-center gap-2">
                 <div className="flex items-center gap-1 text-slate-600 dark:text-slate-300 font-semibold">
                   <Calendar className="w-3.5 h-3.5 text-blue-600" />
-                  <span>Reporting Month (2026):</span>
+                  <span className="hidden sm:inline">Reporting Month:</span>
                 </div>
                 <select
                   value={selectedMonth}
                   onChange={(e) => setSelectedMonth(e.target.value)}
-                  className="px-2.5 py-1 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg text-xs font-bold text-[#0B2559] dark:text-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 cursor-pointer shadow-2xs"
+                  className="px-2 py-1 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg text-xs font-bold text-[#0B2559] dark:text-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 cursor-pointer shadow-2xs"
                 >
                   {MONTHS_2026.map((m) => (
                     <option key={m.key} value={m.key}>
@@ -388,17 +381,35 @@ export const ExecutiveDashboardPage: React.FC<ExecutiveDashboardPageProps> = ({
 
               <div className="h-4 w-px bg-slate-300 dark:bg-slate-700 hidden sm:block" />
 
-              {/* MoM Comparison Switch / Checkbox */}
-              <label className="flex items-center gap-2 cursor-pointer select-none text-slate-700 dark:text-slate-300 font-medium">
+              <label className="flex items-center gap-1.5 cursor-pointer select-none text-slate-700 dark:text-slate-300 font-medium">
                 <input
                   type="checkbox"
                   checked={compareMoM}
                   onChange={(e) => setCompareMoM(e.target.checked)}
-                  className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500/20 cursor-pointer"
+                  className="w-3.5 h-3.5 text-blue-600 rounded focus:ring-blue-500/20 cursor-pointer"
                 />
-                <span>Compare with Previous Month</span>
+                <span className="text-[11px]">Compare MoM</span>
               </label>
             </div>
+
+            {/* Export & Print */}
+            <button
+              onClick={handleExportExcel}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-750 font-semibold text-xs transition-colors shadow-2xs"
+              title="Export Executive Summary to Excel"
+            >
+              <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
+              <span>Export Excel</span>
+            </button>
+
+            <button
+              onClick={handlePrint}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-750 font-semibold text-xs transition-colors shadow-2xs print:hidden"
+              title="Print Dashboard Matrix"
+            >
+              <Printer className="w-3.5 h-3.5 text-slate-500" />
+              <span>Print Report</span>
+            </button>
           </div>
         </div>
       </div>

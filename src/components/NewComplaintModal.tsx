@@ -72,58 +72,60 @@ export const NewComplaintModal: React.FC<NewComplaintModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150">
-      <div className="w-full max-w-lg bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden">
-        {/* Header */}
-        <div className="p-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <PlusCircle className="w-5 h-5 text-indigo-600" />
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 animate-in fade-in duration-150">
+      <div className="w-full max-w-lg bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col max-h-[92vh] my-auto">
+        {/* Header (pinned) */}
+        <div className="p-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-850 flex items-center justify-between shrink-0">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-xl bg-blue-100 dark:bg-blue-900/40 text-blue-600 flex items-center justify-center shadow-xs">
+              <PlusCircle className="w-4 h-4" />
+            </div>
             <div>
-              <h3 className="text-sm font-bold text-slate-900">Log New Service Complaint</h3>
-              <p className="text-[11px] text-slate-500">Initiate automated workflow routing & SLA timers</p>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white">Log New Service Complaint</h3>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400">Initiate automated workflow routing & SLA timers</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-200 transition-colors"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="p-5 space-y-4 text-xs">
-          <div className="grid grid-cols-2 gap-3">
+        {/* Form Body (scrollable if viewport height is restricted) */}
+        <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-5 space-y-3.5 text-xs">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-[11px] font-bold text-slate-700 mb-1">Customer Full Name</label>
+              <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Customer Full Name</label>
               <input
                 type="text"
                 required
                 placeholder="e.g. Jonathan Davis"
                 value={customerName}
                 onChange={(e) => setCustomerName(e.target.value)}
-                className="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs text-slate-900 focus:outline-none focus:border-indigo-500"
+                className="w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
               />
             </div>
             <div>
-              <label className="block text-[11px] font-bold text-slate-700 mb-1">Customer Email</label>
+              <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Customer Email</label>
               <input
                 type="email"
                 placeholder="e.g. j.davis@corp.com"
                 value={customerEmail}
                 onChange={(e) => setCustomerEmail(e.target.value)}
-                className="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs text-slate-900 focus:outline-none focus:border-indigo-500"
+                className="w-full px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-[11px] font-bold text-slate-700 mb-1">Account Tier</label>
+              <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Account Tier</label>
               <select
                 value={accountTier}
                 onChange={(e) => setAccountTier(e.target.value as any)}
-                className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs text-slate-800 bg-white"
+                className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800"
               >
                 <option value="Private Wealth">Private Wealth</option>
                 <option value="Commercial Premier">Commercial Premier</option>
@@ -132,11 +134,11 @@ export const NewComplaintModal: React.FC<NewComplaintModalProps> = ({
               </select>
             </div>
             <div>
-              <label className="block text-[11px] font-bold text-slate-700 mb-1">Severity / Priority</label>
+              <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Severity / Priority</label>
               <select
                 value={priority}
                 onChange={(e) => setPriority(e.target.value as PriorityLevel)}
-                className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs text-slate-800 bg-white"
+                className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800"
               >
                 <option value="Critical">Critical (12h SLA)</option>
                 <option value="High">High (24h SLA)</option>
@@ -146,13 +148,13 @@ export const NewComplaintModal: React.FC<NewComplaintModalProps> = ({
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
-              <label className="block text-[11px] font-bold text-slate-700 mb-1">Category</label>
+              <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Category</label>
               <select
                 value={category}
                 onChange={(e) => handleCategorySelect(e.target.value as IssueCategory)}
-                className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs text-slate-800 bg-white"
+                className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800"
               >
                 <option value="Card">Card</option>
                 <option value="Financial Statement">Financial Statement</option>
@@ -162,11 +164,11 @@ export const NewComplaintModal: React.FC<NewComplaintModalProps> = ({
               </select>
             </div>
             <div>
-              <label className="block text-[11px] font-bold text-slate-700 mb-1">Sub Category</label>
+              <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Sub Category</label>
               <select
                 value={subCategory}
                 onChange={(e) => setSubCategory(e.target.value)}
-                className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs text-slate-800 bg-white"
+                className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800"
               >
                 {subCategoryMap[category].map((sub) => (
                   <option key={sub} value={sub}>{sub}</option>
@@ -174,11 +176,11 @@ export const NewComplaintModal: React.FC<NewComplaintModalProps> = ({
               </select>
             </div>
             <div>
-              <label className="block text-[11px] font-bold text-slate-700 mb-1">Assigned Team</label>
+              <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Assigned Team</label>
               <select
                 value={team}
                 onChange={(e) => setTeam(e.target.value as TeamName)}
-                className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs text-slate-800 bg-white"
+                className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 text-xs text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800"
               >
                 <option value="Frontdesk">Frontdesk</option>
                 <option value="Operation">Operation</option>
@@ -188,28 +190,29 @@ export const NewComplaintModal: React.FC<NewComplaintModalProps> = ({
           </div>
 
           <div>
-            <label className="block text-[11px] font-bold text-slate-700 mb-1">Issue Description & Client Statement</label>
+            <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Issue Description & Client Statement</label>
             <textarea
               required
               rows={3}
               placeholder="State the customer incident, error code, or transaction context..."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full p-2.5 rounded-lg border border-slate-300 text-xs text-slate-900 focus:outline-none focus:border-indigo-500"
+              className="w-full p-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-blue-500"
             />
           </div>
 
-          <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-200">
+          {/* Modal Footer Controls (pinned inside view) */}
+          <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-200 dark:border-slate-800">
             <button
               type="button"
               onClick={onClose}
-              className="px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-100 text-slate-700 font-medium"
+              className="px-3.5 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold flex items-center gap-1.5 shadow-xs"
+              className="px-4 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold flex items-center gap-1.5 shadow-xs transition-colors"
             >
               <Send className="w-3.5 h-3.5" />
               <span>Submit to Intake Pipeline</span>
